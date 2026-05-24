@@ -1,0 +1,3086 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vyronix Labs — Innovating Beyond Limits</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #0066FF;
+    --red-glow: #0055dd;
+    --yellow: #00F5FF;
+    --white: #f0faff;
+    --dim: #a0b8cc;
+    --bg: #050816;
+    --bg2: #0B1120;
+    --bg3: #0d1428;
+    --card: rgba(0,245,255,0.04);
+    --border: rgba(0,102,255,0.3);
+    --border-y: rgba(0,245,255,0.3);
+    --font-head: 'Syne', sans-serif;
+    --font-body: 'Space Grotesk', sans-serif;
+    --font-mono: 'Space Mono', monospace;
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  /* ── CINEMATIC LOADER ── */
+  #siteLoader {
+    position: fixed;
+    inset: 0;
+    z-index: 99998;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #050816;
+  }
+  #siteLoader.fade-out {
+    animation: loaderFadeOut 0.8s ease forwards;
+    pointer-events: none;
+  }
+  @keyframes loaderFadeOut {
+    from { opacity: 1; }
+    to   { opacity: 0; }
+  }
+  .loader-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 70% 55% at 50% 100%, rgba(0,102,255,0.22) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 30% at 50% 50%, rgba(0,102,255,0.06) 0%, transparent 80%);
+  }
+  .loader-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    width: 100%;
+    max-width: 700px;
+    padding: 0 32px;
+  }
+  .loader-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.28em;
+    color: var(--yellow);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: loaderFadeUp 0.6s 0.2s forwards;
+  }
+  .loader-title {
+    font-family: var(--font-head);
+    font-size: clamp(40px, 7vw, 88px);
+    font-weight: 800;
+    letter-spacing: 0.03em;
+    line-height: 1;
+    color: var(--white);
+    text-transform: uppercase;
+    text-shadow:
+      2px 2px 0 rgba(0,102,255,0.5),
+      -1px -1px 0 rgba(0,245,255,0.2);
+    margin-bottom: 12px;
+    opacity: 0;
+    animation: loaderFadeUp 0.6s 0.4s forwards;
+  }
+  .loader-sub {
+    font-family: var(--font-head);
+    font-size: clamp(16px, 2.5vw, 26px);
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    color: var(--red);
+    text-transform: uppercase;
+    margin-bottom: 48px;
+    opacity: 0;
+    animation: loaderFadeUp 0.6s 0.6s forwards;
+  }
+  .loader-bar-wrap {
+    width: 100%;
+    height: 2px;
+    background: rgba(255,255,255,0.08);
+    position: relative;
+    margin-bottom: 14px;
+    opacity: 0;
+    animation: loaderFadeUp 0.4s 0.8s forwards;
+  }
+  .loader-bar-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--yellow), var(--red));
+    box-shadow: 0 0 12px rgba(0,102,255,0.7);
+    transition: width 0.1s linear;
+    position: relative;
+  }
+  .loader-bar-fill::after {
+    content: '';
+    position: absolute;
+    right: 0; top: -3px;
+    width: 6px; height: 8px;
+    background: var(--yellow);
+    border-radius: 1px;
+    box-shadow: 0 0 8px var(--yellow);
+  }
+  .loader-meta {
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--dim);
+    text-transform: uppercase;
+    opacity: 0;
+    animation: loaderFadeUp 0.4s 0.9s forwards;
+  }
+  .loader-meta span:last-child { color: var(--red); }
+  @keyframes loaderFadeUp {
+    from { opacity:0; transform: translateY(16px); }
+    to   { opacity:1; transform: translateY(0); }
+  }
+
+  /* ── AUDIO GATE OVERLAY ── */
+  #audioGate {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #050816;
+    animation: gateIn 0.4s ease forwards;
+  }
+  #audioGate.hidden {
+    animation: gateOut 0.6s ease forwards;
+    pointer-events: none;
+  }
+  @keyframes gateIn  { from { opacity:0; } to { opacity:1; } }
+  @keyframes gateOut { from { opacity:1; } to { opacity:0; } }
+
+  .gate-card {
+    position: relative;
+    border: 1px solid rgba(0,102,255,0.5);
+    background: linear-gradient(145deg, #0B1120 0%, #0c1224 60%, #080e1e 100%);
+    box-shadow:
+      0 0 80px rgba(0,102,255,0.18),
+      0 0 200px rgba(0,102,255,0.06),
+      inset 0 1px 0 rgba(255,255,255,0.05);
+    padding: 52px 56px 48px;
+    max-width: 540px;
+    width: 90%;
+    text-align: center;
+    overflow: hidden;
+    transition: box-shadow 0.35s ease, border-color 0.35s ease, transform 0.35s ease;
+  }
+  .gate-card:hover {
+    border-color: rgba(0,102,255,0.95);
+    box-shadow:
+      0 0 60px rgba(0,102,255,0.45),
+      0 0 140px rgba(0,102,255,0.2),
+      0 0 260px rgba(0,102,255,0.08),
+      inset 0 1px 0 rgba(255,255,255,0.1);
+    transform: translateY(-10px);
+  }
+  .gate-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #0066FF, var(--yellow), #0066FF, transparent);
+    animation: gateTopGlow 3s ease-in-out infinite;
+    transition: opacity 0.3s;
+  }
+  @keyframes gateTopGlow {
+    0%,100% { opacity:0.6; }
+    50%      { opacity:1; }
+  }
+
+  .gate-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.28em;
+    color: var(--red);
+    text-transform: uppercase;
+    margin-bottom: 22px;
+    opacity: 0.85;
+  }
+  .gate-logo {
+    font-family: var(--font-head);
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    color: var(--white);
+    margin-bottom: 6px;
+  }
+  .gate-logo .accent { color: var(--red); }
+  .gate-headline {
+    font-family: var(--font-head);
+    font-size: clamp(28px, 5vw, 44px);
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    line-height: 1;
+    color: var(--white);
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+  .gate-sub {
+    font-family: var(--font-body);
+    font-size: 14px;
+    color: var(--dim);
+    line-height: 1.65;
+    margin-bottom: 36px;
+    max-width: 360px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .gate-btns {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .gate-btn-audio {
+    background: var(--yellow);
+    color: #000;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    padding: 14px 28px;
+    border: none;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .gate-btn-audio:hover {
+    background: #33f7ff;
+    box-shadow: 0 0 28px rgba(0,245,255,0.5);
+    transform: translateY(-2px);
+  }
+  .gate-btn-silent {
+    background: transparent;
+    color: var(--white);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    padding: 13px 28px;
+    border: 1px solid rgba(255,255,255,0.22);
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: border-color 0.2s, color 0.2s, transform 0.15s;
+  }
+  .gate-btn-silent:hover {
+    border-color: rgba(255,255,255,0.5);
+    color: var(--white);
+    transform: translateY(-2px);
+  }
+  /* corner scanline effect */
+  .gate-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 3px,
+      rgba(0,0,0,0.04) 3px,
+      rgba(0,0,0,0.04) 4px
+    );
+    pointer-events: none;
+  }
+  /* pulse rings */
+  .gate-pulse {
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    border: 1px solid rgba(0,102,255,0.12);
+    animation: gatePulse 3s ease-out infinite;
+  }
+  .gate-pulse:nth-child(2) { animation-delay: 1s; }
+  .gate-pulse:nth-child(3) { animation-delay: 2s; }
+  @keyframes gatePulse {
+    0%   { transform: scale(0.8); opacity:0.4; }
+    100% { transform: scale(2.2); opacity:0; }
+  }
+
+  /* ── FLOATING AUDIO PLAYER (corner control) ── */
+  #audioPlayer {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 9000;
+    display: none;
+    align-items: center;
+    gap: 2px;
+    background: rgba(10,10,10,0.92);
+    border: 1px solid rgba(0,102,255,0.35);
+    backdrop-filter: blur(20px);
+    box-shadow: 0 8px 40px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04);
+    overflow: hidden;
+    border-radius: 2px;
+    padding: 8px 10px;
+    gap: 8px;
+  }
+  #audioPlayer.visible { display: flex; }
+
+  .ap-toggle {
+    width: 52px;
+    height: 52px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    background: none;
+    border: none;
+    color: var(--white);
+    transition: background 0.2s;
+    position: relative;
+  }
+  .ap-toggle:hover { background: rgba(0,102,255,0.12); }
+  .ap-toggle svg { width:20px; height:20px; }
+  /* spinning vinyl ring when playing */
+  .ap-toggle .vinyl-ring {
+    position: absolute;
+    inset: 8px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(0,102,255,0.5);
+    animation: vinylSpin 4s linear infinite;
+    display: none;
+  }
+  #audioPlayer.playing .ap-toggle .vinyl-ring { display: block; }
+  @keyframes vinylSpin { to { transform: rotate(360deg); } }
+
+  .ap-body {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 10px 14px 10px 4px;
+    opacity: 0;
+    transition: opacity 0.2s 0.15s;
+    pointer-events: none;
+  }
+  #audioPlayer.expanded .ap-body { opacity: 1; pointer-events: auto; }
+
+  .ap-title {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    color: var(--red);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .ap-track {
+    font-family: var(--font-head);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--white);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 8px;
+  }
+  .ap-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .ap-btn {
+    background: none;
+    border: none;
+    color: var(--dim);
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    transition: color 0.15s;
+    flex-shrink: 0;
+  }
+  .ap-btn:hover { color: var(--white); }
+  .ap-btn.play-pause {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--red);
+    color: #fff;
+    justify-content: center;
+  }
+  .ap-btn.play-pause:hover { background: var(--red-glow); box-shadow: 0 0 14px rgba(0,102,255,0.6); }
+  .ap-stop-btn {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.08);
+    color: var(--dim);
+    justify-content: center;
+  }
+  .ap-stop-btn:hover { background: rgba(255,255,255,0.15); color: var(--white); }
+  .ap-btn svg { width: 14px; height: 14px; }
+  .ap-btn.play-pause svg { width:12px; height:12px; }
+
+  .ap-progress-wrap {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .ap-progress {
+    flex: 1;
+    height: 3px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 2px;
+    cursor: pointer;
+    position: relative;
+    overflow: visible;
+  }
+  .ap-progress-fill {
+    height: 100%;
+    background: var(--red);
+    border-radius: 2px;
+    width: 0%;
+    transition: width 0.3s linear;
+    pointer-events: none;
+  }
+  .ap-time {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    color: var(--dim);
+    white-space: nowrap;
+  }
+  /* waveform bars when playing */
+  .ap-wave {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    height: 14px;
+  }
+  .ap-wave span {
+    display: block;
+    width: 2px;
+    background: var(--red);
+    border-radius: 1px;
+    animation: waveBar 0.8s ease-in-out infinite;
+  }
+  .ap-wave span:nth-child(2) { animation-delay: 0.15s; }
+  .ap-wave span:nth-child(3) { animation-delay: 0.3s;  }
+  .ap-wave span:nth-child(4) { animation-delay: 0.45s; }
+  #audioPlayer:not(.playing) .ap-wave span { animation-play-state: paused; height: 4px !important; }
+  @keyframes waveBar {
+    0%,100% { height: 4px; }
+    50%      { height: 14px; }
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--white);
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.6;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* AUKTAVE-style yellow arrow cursor */
+  #cursor {
+    position: fixed;
+    width: 28px;
+    height: 28px;
+    pointer-events: none;
+    z-index: 999999;
+    transform-origin: 4px 4px;
+    transition: transform 0.08s ease;
+    will-change: transform, left, top;
+  }
+  #cursor svg {
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 0 6px rgba(0,245,255,0.8));
+  }
+  #cursor-ring {
+    display: none;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--red); }
+
+  /* Alert bar — fixed at very top */
+  .alert-bar {
+    background: var(--red);
+    color: #fff;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    padding: 7px 0;
+    overflow: hidden;
+    white-space: nowrap;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1100;
+    display: flex;
+    align-items: center;
+  }
+  .alert-bar-inner {
+    display: inline-flex;
+    align-items: center;
+    gap: 0;
+    animation: alertScroll 28s linear infinite;
+    white-space: nowrap;
+  }
+  .alert-bar-inner span { padding: 0 32px; text-transform: uppercase; letter-spacing: 0.14em; }
+  .alert-close {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    opacity: 0.7;
+    font-family: var(--font-mono);
+    z-index: 2;
+  }
+  @keyframes alertScroll {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* NAV — fixed, sits below the alert bar */
+  :root {
+    --alert-bar-h: 32px; /* JS will update this */
+  }
+  nav {
+    position: fixed;
+    top: var(--alert-bar-h); left: 0; right: 0;
+    z-index: 1000;
+    transition: top 0.25s ease;
+  }
+  .nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    /* Glassmorphism */
+    background: rgba(8, 8, 12, 0.45);
+    backdrop-filter: blur(28px) saturate(180%);
+    -webkit-backdrop-filter: blur(28px) saturate(180%);
+    padding: 0 40px;
+    height: 64px;
+    border-bottom: 1px solid rgba(0,102,255, 0.18);
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow:
+      0 8px 32px rgba(0, 0, 0, 0.55),
+      inset 0 1px 0 rgba(255,255,255,0.06),
+      0 1px 0 rgba(0,102,255,0.12);
+  }
+  /* Logo */
+  .nav-logo {
+    font-family: var(--font-head);
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--white);
+    text-decoration: none;
+    letter-spacing: 0.1em;
+    display: flex;
+    align-items: center;
+    gap: 0;
+    flex-shrink: 0;
+  }
+  .nav-logo .logo-accent { color: var(--red); }
+  /* Center links */
+  .nav-links {
+    display: flex;
+    gap: 20px;
+    list-style: none;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+  }
+  .nav-links a {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: rgba(255,255,255,0.55);
+    text-decoration: none;
+    transition: color 0.2s;
+    text-transform: uppercase;
+  }
+  .nav-links a:hover { color: var(--white); }
+  .nav-links a.active { color: var(--yellow); }
+  /* Yellow CTA — exact AUKTAVE style */
+  .nav-cta {
+    background: var(--yellow);
+    color: #000;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    padding: 12px 24px;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: background 0.2s, box-shadow 0.2s;
+    border: none;
+    cursor: pointer;
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+  .nav-cta:hover {
+    background: #33f7ff;
+    box-shadow: 0 0 24px rgba(0,245,255,0.4);
+  }
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    background: none;
+    border: none;
+  }
+  .hamburger span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: var(--white);
+    transition: 0.3s;
+  }
+
+  /* RIBBON — sits flush at very bottom of hero */
+  .ribbon {
+    background: #080e1e;
+    border-top: 1px solid rgba(255,255,255,0.07);
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    overflow: hidden;
+    padding: 14px 0;
+    white-space: nowrap;
+    position: relative;
+    z-index: 5;
+    flex-shrink: 0;
+    width: 100%;
+  }
+  .ribbon-track {
+    display: inline-flex;
+    align-items: center;
+    gap: 0;
+    animation: ribbonScroll 30s linear infinite;
+  }
+  .ribbon-track:hover { animation-play-state: paused; }
+  .ribbon-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 20px;
+    padding: 0 32px;
+  }
+  .ribbon-text {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    color: rgba(255,255,255,0.75);
+    text-transform: uppercase;
+  }
+  .ribbon-sep {
+    display: inline-flex;
+    align-items: center;
+    color: var(--red);
+    flex-shrink: 0;
+  }
+  @keyframes ribbonScroll {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* HERO BG VIDEO */
+  #heroBgVideo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    z-index: 0;
+    opacity: 0.35;
+    pointer-events: none;
+    transition: opacity 1.2s ease;
+  }
+  #heroBgVideo.fading {
+    opacity: 0 !important;
+  }
+  /* make sure gradient + grid sit above video */
+  .hero-bg-gradient { z-index: 1; }
+  .hero-grid        { z-index: 1; }
+  #particles-canvas { z-index: 2; }
+  .hero-spacer      { z-index: 3; }
+  .hero-scroll      { z-index: 3; }
+  .ribbon           { z-index: 5; }
+
+  /* HERO */
+  #home {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    padding-top: calc(var(--alert-bar-h, 32px) + 64px);
+    padding-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .hero-spacer {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 24px 0;
+    min-height: 0;
+  }
+  #particles-canvas {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+  .hero-bg-gradient {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 100%, rgba(0,102,255,0.18) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 30% at 20% 20%, rgba(0,245,255,0.08) 0%, transparent 60%);
+  }
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,102,255,0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,102,255,0.07) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse at center, black 30%, transparent 80%);
+  }
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 900px;
+    padding: 0 24px;
+  }
+  .hero-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    color: var(--red);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.3s forwards;
+  }
+  .hero-title {
+    font-family: var(--font-head);
+    font-size: clamp(52px, 7.5vw, 96px);
+    font-weight: 800;
+    line-height: 0.95;
+    letter-spacing: 0.03em;
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.5s forwards;
+  }
+  .hero-title .accent { color: var(--red); }
+  .hero-title .accent-y { color: var(--yellow); }
+  .hero-sub {
+    font-family: var(--font-body);
+    font-size: clamp(16px, 2vw, 20px);
+    font-weight: 300;
+    color: var(--dim);
+    letter-spacing: 0.05em;
+    margin-bottom: 32px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.7s forwards;
+  }
+  .hero-sub strong { color: var(--white); font-weight: 600; }
+  .hero-btns {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.9s forwards;
+  }
+  .btn-primary {
+    background: var(--red);
+    color: #fff;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    padding: 14px 32px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.2s;
+    text-transform: uppercase;
+  }
+  .btn-primary:hover {
+    background: var(--red-glow);
+    box-shadow: 0 0 30px rgba(0,102,255,0.6);
+    transform: translateY(-2px);
+  }
+  .btn-outline {
+    background: transparent;
+    color: var(--white);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    padding: 13px 32px;
+    border: 1px solid rgba(255,255,255,0.25);
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.2s;
+    text-transform: uppercase;
+  }
+  .btn-outline:hover {
+    border-color: var(--yellow);
+    color: var(--yellow);
+    box-shadow: 0 0 20px rgba(0,245,255,0.2);
+    transform: translateY(-2px);
+  }
+  .hero-stats {
+    display: flex;
+    gap: 40px;
+    justify-content: center;
+    margin-top: 40px;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeUp 0.8s 1.1s forwards;
+  }
+  .hero-stat { text-align: center; }
+  .hero-stat .num {
+    font-family: var(--font-head);
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--yellow);
+    display: block;
+  }
+  .hero-stat .label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--dim);
+    text-transform: uppercase;
+  }
+  .hero-scroll {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    opacity: 0;
+    animation: fadeIn 1s 1.5s forwards;
+    z-index: 2;
+    padding-bottom: 12px;
+    flex-shrink: 0;
+  }
+  .hero-scroll span {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--dim);
+    text-transform: uppercase;
+  }
+  .scroll-line {
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(to bottom, var(--red), transparent);
+    animation: scrollPulse 2s infinite;
+  }
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 1; transform: scaleY(1); }
+    50% { opacity: 0.4; transform: scaleY(0.8); }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  /* Sections */
+  section {
+    padding: 100px 5%;
+  }
+  .section-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    color: var(--red);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .section-title {
+    font-family: var(--font-head);
+    font-size: clamp(44px, 7vw, 80px);
+    font-weight: 800;
+    line-height: 0.95;
+    letter-spacing: 0.02em;
+    margin-bottom: 24px;
+  }
+  .section-title .accent { color: var(--red); }
+  .section-title .accent-y { color: var(--yellow); }
+  .section-desc {
+    font-size: 17px;
+    color: var(--dim);
+    max-width: 600px;
+    line-height: 1.7;
+  }
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* ABOUT */
+  #about { background: var(--bg2); border-top: 1px solid var(--border); }
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+    margin-top: 60px;
+  }
+  .about-text p {
+    font-size: 17px;
+    color: var(--dim);
+    line-height: 1.8;
+    margin-bottom: 20px;
+  }
+  .about-text p strong { color: var(--white); }
+  .about-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .about-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 24px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .about-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--red);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s;
+  }
+  .about-card:hover::before { transform: scaleX(1); }
+  .about-card:hover {
+    border-color: rgba(0,102,255,0.5);
+    box-shadow: 0 0 30px rgba(0,102,255,0.1);
+  }
+  .about-card-icon {
+    margin-bottom: 12px;
+    display: block;
+  }
+  .about-card h3 {
+    font-family: var(--font-head);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    color: var(--red);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .about-card p {
+    font-size: 14px;
+    color: var(--dim);
+    line-height: 1.6;
+  }
+  .about-pillars {
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .pillar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 20px;
+    background: var(--card);
+    border-left: 3px solid var(--red);
+  }
+  .pillar-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--red);
+    text-transform: uppercase;
+    width: 100px;
+    flex-shrink: 0;
+  }
+  .pillar-text { font-size: 15px; color: var(--dim); }
+
+  /* TEAM — AUKTAVE photo-card style */
+  #team { background: var(--bg); }
+  .team-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    margin-top: 60px;
+  }
+  .team-card {
+    position: relative;
+    overflow: hidden;
+    background: #0a1020;
+    transition: transform 0.35s ease;
+  }
+  .team-card:hover { transform: translateY(-6px); z-index: 2; }
+  /* Photo area */
+  .team-photo {
+    width: 100%;
+    aspect-ratio: 3/4;
+    background: linear-gradient(160deg, #0a1020 0%, #060a18 60%, #0a1020 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  /* Decorative vertical stripe like AUK cards */
+  .team-photo::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; bottom: 0;
+    width: 4px;
+    background: var(--red);
+  }
+  /* Big initials placeholder (shown until real photo is provided) */
+  .team-photo-initial {
+    font-family: var(--font-head);
+    font-size: clamp(60px, 8vw, 100px);
+    font-weight: 900;
+    color: rgba(0,102,255,0.12);
+    letter-spacing: -0.04em;
+    user-select: none;
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+  }
+  /* Hover overlay */
+  .team-photo-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(8,8,8,0.9) 0%, transparent 50%);
+    opacity: 0;
+    transition: opacity 0.35s;
+    display: flex;
+    align-items: flex-end;
+    padding: 20px;
+  }
+  .team-card:hover .team-photo-overlay { opacity: 1; }
+  .team-photo-overlay-text {
+    font-size: 13px;
+    color: var(--dim);
+    font-family: var(--font-mono);
+    letter-spacing: 0.05em;
+    line-height: 1.6;
+  }
+  /* Info row below photo */
+  .team-info {
+    padding: 20px 22px 24px;
+    border-top: 1px solid rgba(0,102,255,0.2);
+    background: #080e1e;
+  }
+  .team-name {
+    font-family: var(--font-head);
+    font-size: clamp(16px, 2vw, 22px);
+    font-weight: 900;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--white);
+    margin-bottom: 4px;
+    line-height: 1.1;
+  }
+  .team-role {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    color: var(--red);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .team-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .tag {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    padding: 4px 8px;
+    border: 1px solid rgba(0,245,255,0.25);
+    color: var(--yellow);
+    text-transform: uppercase;
+    background: rgba(0,245,255,0.04);
+  }
+
+  /* SERVICES */
+  #services { background: var(--bg2); border-top: 1px solid var(--border); }
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-top: 60px;
+  }
+  .service-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 32px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s;
+  }
+  .service-card::before {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--red), var(--yellow));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s;
+  }
+  .service-card:hover::before { transform: scaleX(1); }
+  .service-card:hover {
+    border-color: rgba(0,102,255,0.4);
+    box-shadow: 0 10px 40px rgba(0,102,255,0.12);
+    transform: translateY(-4px);
+  }
+  .service-num {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: rgba(0,102,255,0.4);
+    letter-spacing: 0.1em;
+    margin-bottom: 20px;
+  }
+  .service-icon { margin-bottom: 16px; display: block; }
+  .service-title {
+    font-family: var(--font-head);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    margin-bottom: 12px;
+  }
+  .service-desc { font-size: 14px; color: var(--dim); line-height: 1.7; }
+  .collab-banner {
+    margin-top: 48px;
+    background: linear-gradient(135deg, rgba(0,102,255,0.1), rgba(0,245,255,0.05));
+    border: 1px solid var(--border);
+    padding: 32px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  .collab-text h3 {
+    font-family: var(--font-head);
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .collab-text p { font-size: 15px; color: var(--dim); }
+  .collab-text a.inline-link {
+    color: var(--yellow);
+    text-decoration: none;
+    font-weight: 600;
+    border-bottom: 1px solid var(--yellow);
+    padding-bottom: 1px;
+  }
+
+  /* PROJECTS */
+  #projects { background: var(--bg); }
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-top: 60px;
+  }
+  .project-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    position: relative;
+    transition: all 0.3s;
+    cursor: pointer;
+  }
+  .project-card:hover {
+    border-color: var(--red);
+    box-shadow: 0 20px 60px rgba(0,102,255,0.2);
+    transform: translateY(-6px);
+  }
+  .project-thumb {
+    height: 180px;
+    background: linear-gradient(135deg, #1a0a0a, #0d0510);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 48px;
+    position: relative;
+    overflow: hidden;
+  }
+  .project-thumb::after {
+    content: 'VIEW PROJECT';
+    position: absolute;
+    inset: 0;
+    background: rgba(0,102,255,0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .project-card:hover .project-thumb::after { opacity: 1; }
+  .project-info { padding: 24px; }
+  .project-cat {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--red);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .project-name {
+    font-family: var(--font-head);
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  .project-desc { font-size: 14px; color: var(--dim); line-height: 1.6; }
+  .project-techs {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+  }
+  .project-tech {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    padding: 3px 8px;
+    background: rgba(0,102,255,0.12);
+    border: 1px solid rgba(0,102,255,0.3);
+    color: var(--red);
+  }
+
+  /* TECH STACK */
+  #techstack { background: var(--bg2); border-top: 1px solid var(--border); }
+  .tech-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 60px;
+    justify-content: center;
+  }
+  .tech-badge {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 16px 24px;
+    transition: all 0.3s;
+    cursor: default;
+    min-width: 160px;
+  }
+  .tech-badge:hover {
+    border-color: var(--yellow);
+    box-shadow: 0 0 20px rgba(0,245,255,0.15);
+    transform: translateY(-3px);
+  }
+  .tech-badge:hover .tech-icon { filter: drop-shadow(0 0 8px rgba(0,245,255,0.6)); }
+  .tech-icon { display: flex; align-items: center; justify-content: center; }
+  .tech-name {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+
+  /* HACKATHON */
+  #hackathon { background: var(--bg); }
+  .hack-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+    margin-top: 60px;
+  }
+  .hack-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .hack-stat {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 32px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hack-stat::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--red);
+  }
+  .hack-stat-num {
+    font-family: var(--font-head);
+    font-size: 40px;
+    font-weight: 900;
+    color: var(--yellow);
+    display: block;
+    margin-bottom: 4px;
+  }
+  .hack-stat-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--dim);
+    text-transform: uppercase;
+  }
+  .hack-info h3 {
+    font-family: var(--font-head);
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: var(--yellow);
+  }
+  .hack-info p {
+    font-size: 16px;
+    color: var(--dim);
+    line-height: 1.8;
+    margin-bottom: 16px;
+  }
+  .hack-timeline {
+    margin-top: 32px;
+    position: relative;
+    padding-left: 24px;
+    border-left: 2px solid var(--border);
+  }
+  .timeline-item {
+    margin-bottom: 24px;
+    position: relative;
+  }
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -31px;
+    top: 6px;
+    width: 10px; height: 10px;
+    background: var(--red);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--red);
+  }
+  .timeline-item h4 {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    color: var(--red);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .timeline-item p { font-size: 14px; color: var(--dim); }
+
+  /* PARTNERSHIP */
+  #partnership { background: var(--bg2); border-top: 1px solid var(--border); }
+  .partner-cards {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    margin-top: 60px;
+  }
+  .partner-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 40px;
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+    transition: all 0.3s;
+  }
+  .partner-card:hover {
+    border-color: rgba(0,102,255,0.4);
+    box-shadow: 0 10px 40px rgba(0,102,255,0.1);
+  }
+  .partner-icon-wrap {
+    width: 60px; height: 60px;
+    background: rgba(0,102,255,0.1);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    flex-shrink: 0;
+  }
+  .partner-content h3 {
+    font-family: var(--font-head);
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .partner-content p { font-size: 15px; color: var(--dim); line-height: 1.7; }
+  .partner-content a {
+    color: var(--yellow);
+    text-decoration: none;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    display: inline-block;
+    margin-top: 12px;
+    border-bottom: 1px solid rgba(0,245,255,0.4);
+    transition: border-color 0.2s;
+  }
+  .partner-content a:hover { border-color: var(--yellow); }
+
+  /* JOIN */
+  #join { background: var(--bg); }
+  .join-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    margin-top: 60px;
+  }
+  .join-info h3 {
+    font-family: var(--font-head);
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: var(--yellow);
+  }
+  .join-info p {
+    font-size: 16px;
+    color: var(--dim);
+    line-height: 1.8;
+    margin-bottom: 16px;
+  }
+  .join-perks {
+    margin-top: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .perk {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 15px;
+    color: var(--dim);
+  }
+  .perk::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--red);
+    border-radius: 50%;
+    flex-shrink: 0;
+    box-shadow: 0 0 8px var(--red);
+  }
+
+  /* Forms */
+  .form-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    backdrop-filter: blur(10px);
+    padding: 40px;
+  }
+  .form-group { margin-bottom: 20px; }
+  .form-group label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--red);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    width: 100%;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(0,102,255,0.25);
+    color: var(--white);
+    font-family: var(--font-body);
+    font-size: 15px;
+    padding: 12px 16px;
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    border-radius: 0;
+    -webkit-appearance: none;
+  }
+  .form-group input:focus,
+  .form-group textarea:focus,
+  .form-group select:focus {
+    border-color: var(--red);
+    box-shadow: 0 0 20px rgba(0,102,255,0.15);
+  }
+  .form-group input::placeholder,
+  .form-group textarea::placeholder {
+    color: rgba(173,181,189,0.4);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.05em;
+  }
+  .form-group select option {
+    background: var(--bg3);
+    color: var(--white);
+  }
+  .form-group textarea { resize: vertical; min-height: 100px; }
+  .btn-submit {
+    width: 100%;
+    background: var(--red);
+    color: #fff;
+    border: none;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    letter-spacing: 0.2em;
+    padding: 16px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-submit::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+    transform: translateX(-100%);
+    transition: transform 0.4s;
+  }
+  .btn-submit:hover::before { transform: translateX(100%); }
+  .btn-submit:hover {
+    background: var(--red-glow);
+    box-shadow: 0 0 30px rgba(0,102,255,0.5);
+  }
+  .success-msg {
+    display: none;
+    text-align: center;
+    padding: 40px;
+    background: rgba(0,102,255,0.08);
+    border: 1px solid rgba(0,102,255,0.4);
+  }
+  .success-msg h3 {
+    font-family: var(--font-head);
+    font-size: 18px;
+    color: var(--yellow);
+    margin-bottom: 12px;
+  }
+  .success-msg p { font-size: 15px; color: var(--dim); line-height: 1.6; }
+
+  /* CONTACT */
+  #contact { background: var(--bg2); border-top: 1px solid var(--border); }
+  .contact-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    margin-top: 60px;
+  }
+  .contact-info h3 {
+    font-family: var(--font-head);
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: var(--yellow);
+  }
+  .contact-info p {
+    font-size: 16px;
+    color: var(--dim);
+    line-height: 1.8;
+    margin-bottom: 32px;
+  }
+  .contact-items { display: flex; flex-direction: column; gap: 16px; }
+  .contact-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 20px;
+    background: var(--card);
+    border: 1px solid var(--border);
+  }
+  .contact-item-icon {
+    font-size: 20px;
+    flex-shrink: 0;
+    width: 40px;
+    text-align: center;
+  }
+  .contact-item-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--red);
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 2px;
+  }
+  .contact-item-value {
+    font-size: 15px;
+    color: var(--dim);
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--bg);
+    border-top: 1px solid var(--border);
+    padding: 60px 5% 32px;
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 48px;
+    margin-bottom: 48px;
+  }
+  .footer-brand .logo {
+    font-family: var(--font-head);
+    font-size: 20px;
+    font-weight: 900;
+    letter-spacing: 0.1em;
+    margin-bottom: 16px;
+  }
+  .footer-brand .logo span { color: var(--red); }
+  .footer-brand p {
+    font-size: 14px;
+    color: var(--dim);
+    line-height: 1.8;
+    margin-bottom: 24px;
+  }
+  .footer-col h4 {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--red);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .footer-col ul a {
+    font-size: 14px;
+    color: var(--dim);
+    text-decoration: none;
+    transition: color 0.2s;
+    font-family: var(--font-body);
+  }
+  .footer-col ul a:hover { color: var(--white); }
+  .footer-bottom {
+    border-top: 1px solid var(--border);
+    padding-top: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .footer-bottom p {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: rgba(173,181,189,0.5);
+    text-transform: uppercase;
+  }
+  .footer-bottom .tagline {
+    color: var(--yellow);
+    opacity: 0.7;
+  }
+
+  /* Mobile Menu */
+  .mobile-menu {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(8,8,8,0.97);
+    z-index: 999;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 32px;
+  }
+  .mobile-menu.open { display: flex; }
+  .mobile-menu a {
+    font-family: var(--font-head);
+    font-size: 24px;
+    color: var(--white);
+    text-decoration: none;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .mobile-menu a:hover { color: var(--red); }
+  .mobile-close {
+    position: absolute;
+    top: 24px; right: 24px;
+    background: none;
+    border: none;
+    color: var(--white);
+    font-size: 28px;
+    cursor: pointer;
+  }
+
+  /* ── RESPONSIVE ── */
+
+  @media (max-width: 1024px) {
+    .nav-links { gap: 14px; }
+    .team-grid { grid-template-columns: repeat(2, 1fr); }
+    .services-grid { grid-template-columns: repeat(2, 1fr); }
+    .projects-grid { grid-template-columns: repeat(2, 1fr); }
+    .footer-grid { grid-template-columns: 1fr 1fr; gap: 40px; }
+    .about-grid { gap: 48px; }
+  }
+
+  @media (max-width: 900px) {
+    .nav-links { display: none !important; }
+    .nav-cta  { display: none !important; }
+    .hamburger { display: flex !important; }
+  }
+
+  @media (max-width: 768px) {
+    /* Nav */
+    .nav-inner { padding: 0 20px; }
+
+    /* Sections */
+    section { padding: 72px 6%; }
+
+    /* Hero */
+    .hero-stats { gap: 20px; flex-wrap: wrap; justify-content: center; }
+    .hero-stat .num { font-size: 28px; }
+    .hero-btns { flex-direction: column; align-items: center; gap: 12px; }
+    .hero-btns .btn-primary,
+    .hero-btns .btn-outline { width: 100%; max-width: 280px; text-align: center; }
+
+    /* About */
+    .about-grid { grid-template-columns: 1fr; gap: 40px; }
+    .about-cards { grid-template-columns: 1fr 1fr; }
+
+    /* Team */
+    .team-grid { grid-template-columns: repeat(2, 1fr); }
+
+    /* Services */
+    .services-grid { grid-template-columns: 1fr; }
+
+    /* Projects */
+    .projects-grid { grid-template-columns: 1fr; }
+
+    /* Hackathon / Join / Contact layouts */
+    .hack-layout,
+    .join-layout,
+    .contact-layout { grid-template-columns: 1fr; gap: 40px; }
+
+    /* Partner cards */
+    .partner-cards { grid-template-columns: 1fr; }
+
+    /* Footer */
+    .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+    .footer-bottom { flex-direction: column; text-align: center; gap: 8px; }
+
+    /* Collab banner */
+    .collab-banner { flex-direction: column; align-items: flex-start; gap: 20px; }
+
+    /* Audio gate */
+    .gate-card { padding: 40px 28px 36px; }
+    .gate-headline { font-size: clamp(24px, 8vw, 38px); }
+    .gate-btns { flex-direction: column; align-items: center; }
+    .gate-btn-audio,
+    .gate-btn-silent { width: 100%; max-width: 260px; justify-content: center; }
+
+    /* Loader */
+    .loader-title { font-size: clamp(28px, 8vw, 56px); }
+    .loader-content { padding: 0 24px; }
+
+    /* Audio player */
+    #audioPlayer { bottom: 16px; right: 16px; }
+  }
+
+  @media (max-width: 600px) {
+    /* About cards */
+    .about-cards { grid-template-columns: 1fr; }
+
+    /* Tech badges — wrap nicely */
+    .tech-badges { gap: 8px; }
+    .tech-badge { padding: 10px 14px; font-size: 11px; }
+
+    /* Hero label smaller */
+    .hero-label { font-size: 9px; letter-spacing: 0.18em; }
+
+    /* Section titles */
+    .section-title { font-size: clamp(34px, 9vw, 56px); }
+  }
+
+  @media (max-width: 480px) {
+    /* Team single column */
+    .team-grid { grid-template-columns: 1fr; }
+
+    /* Services single col already — just pad */
+    section { padding: 56px 5%; }
+
+    /* Hero stats row */
+    .hero-stats { gap: 16px; }
+    .hero-stat .num { font-size: 24px; }
+    .hero-stat .label { font-size: 9px; }
+
+    /* Nav logo shrink */
+    .nav-logo { font-size: 16px; }
+    .nav-logo svg { width: 22px; height: 22px; margin-right: 6px !important; }
+
+    /* Gate card compact */
+    .gate-card { padding: 32px 20px 28px; }
+    .gate-logo { font-size: 20px; }
+    .gate-sub { font-size: 13px; }
+
+    /* Loader compact */
+    .loader-label { font-size: 9px; letter-spacing: 0.2em; }
+    .loader-sub { font-size: clamp(13px, 3.5vw, 18px); margin-bottom: 36px; }
+
+    /* Footer brand */
+    .footer-grid { gap: 24px; }
+
+    /* Collab banner */
+    .collab-banner { padding: 24px 20px; }
+
+    /* Forms */
+    .form-group input,
+    .form-group textarea,
+    .form-group select { font-size: 14px; }
+  }
+
+  @media (max-width: 360px) {
+    .gate-btn-audio,
+    .gate-btn-silent { font-size: 10px; padding: 12px 20px; }
+    .hero-btns .btn-primary,
+    .hero-btns .btn-outline { padding: 12px 20px; font-size: 10px; }
+    .nav-logo { font-size: 14px; }
+  }
+
+  /* Glitch animation */
+  @keyframes glitch {
+    0%, 90%, 100% { text-shadow: none; }
+    92% { text-shadow: 3px 0 var(--red), -3px 0 var(--yellow); }
+    94% { text-shadow: -3px 0 var(--red), 3px 0 var(--yellow); }
+    96% { text-shadow: 2px 0 var(--red); }
+  }
+  .hero-title { animation: fadeUp 0.8s 0.5s forwards, glitch 8s 3s infinite; }
+
+  /* SVG icon sizing */
+  .icon-svg {
+    width: 28px; height: 28px;
+    color: var(--red);
+    display: block;
+  }
+  .proj-svg {
+    width: 52px; height: 52px;
+    color: var(--red);
+    opacity: 0.7;
+  }
+  .badge-svg {
+    width: 20px; height: 20px;
+    color: var(--red);
+    flex-shrink: 0;
+  }
+  .partner-svg {
+    width: 36px; height: 36px;
+    color: var(--red);
+  }
+  .contact-icon-svg {
+    width: 22px; height: 22px;
+    color: var(--red);
+    flex-shrink: 0;
+  }
+  .success-icon-svg {
+    width: 22px; height: 22px;
+    color: var(--yellow);
+    flex-shrink: 0;
+  }
+
+
+  .team-dept {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    color: var(--yellow);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+    opacity: 0.8;
+  }
+  .team-instagram {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    margin-top: 14px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--dim);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(173,181,189,0.2);
+    padding-bottom: 2px;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .team-instagram:hover {
+    color: #0066FF;
+    border-color: #0066FF;
+  }
+  .team-instagram svg {
+    flex-shrink: 0;
+    transition: color 0.2s;
+  }
+
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════
+     AUDIO GATE — shown on every page load
+════════════════════════════════════════════ -->
+<div id="audioGate">
+  <div class="gate-card">
+    <div class="gate-pulse"></div>
+    <div class="gate-pulse"></div>
+    <div class="gate-pulse"></div>
+    <p class="gate-label">/ Audio Gate</p>
+    <div class="gate-logo">VYRONIX<span class="accent">LABS</span></div>
+    <h2 class="gate-headline">Enter The<br>Lab</h2>
+    <p class="gate-sub">Choose your entry mode. You can toggle audio anytime from the player control in the corner.</p>
+    <div class="gate-btns">
+      <button class="gate-btn-audio" onclick="enterSite(true)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+        Enter With Audio
+      </button>
+      <button class="gate-btn-silent" onclick="enterSite(false)">Enter Without Audio</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     CINEMATIC LOADER
+════════════════════════════════════════════ -->
+<div id="siteLoader" style="display:none;">
+  <div class="loader-bg"></div>
+  <div class="loader-content">
+    <p class="loader-label">TRANSMISSION INCOMING</p>
+    <h1 class="loader-title">ENTER THE UPSIDE DOWN</h1>
+    <p class="loader-sub">OF INNOVATION</p>
+    <div class="loader-bar-wrap">
+      <div class="loader-bar-fill" id="loaderFill"></div>
+    </div>
+    <div class="loader-meta">
+      <span id="loaderPct">SYNC 0%</span>
+      <span>HAWKINS LAB — 1986</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     FLOATING AUDIO PLAYER — corner control
+════════════════════════════════════════════ -->
+<div id="audioPlayer">
+  <audio id="bgAudio" loop preload="none">
+    <source src="Majestic x Boney M. - Rasputin (2022 Remix).mp3" type="audio/mpeg">
+  </audio>
+  <button class="ap-btn play-pause" id="apPlayPause" onclick="togglePlay()" title="Play / Pause">
+    <svg id="ppIcon" viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+  </button>
+  <button class="ap-btn ap-stop-btn" onclick="stopAudio()" title="Stop">
+    <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><rect x="6" y="6" width="12" height="12" rx="1"/></svg>
+  </button>
+</div>
+
+<div id="cursor">
+  <svg viewBox="0 0 20 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M2 2L18 11L10.5 12.5L7 21L2 2Z" fill="#00F5FF" stroke="#00F5FF" stroke-width="1" stroke-linejoin="round"/>
+  </svg>
+</div>
+<div id="cursor-ring"></div>
+
+<!-- Alert bar -->
+<div class="alert-bar" id="alertBar">
+  <div class="alert-bar-inner" id="alertInner">
+    <span>The veil has fractured. The gateway collapses. Vyronix Labs emerges from the rift.</span>
+    <span>The experiment begins now. Welcome to the future of innovation.</span>
+    <span>AI &nbsp;·&nbsp; Arduino &nbsp;·&nbsp; IoT &nbsp;·&nbsp; Automation &nbsp;·&nbsp; Cybersecurity &nbsp;·&nbsp; Web Dev</span>
+    <span>Swastik &nbsp;·&nbsp; Suvajit &nbsp;·&nbsp; Dibyojoti &nbsp;·&nbsp; Aditya &nbsp;·&nbsp; Building Beyond Limits.</span>
+    <!-- duplicate for seamless loop -->
+    <span>The veil has fractured. The gateway collapses. Vyronix Labs emerges from the rift.</span>
+    <span>The experiment begins now. Welcome to the future of innovation.</span>
+    <span>AI &nbsp;·&nbsp; Arduino &nbsp;·&nbsp; IoT &nbsp;·&nbsp; Automation &nbsp;·&nbsp; Cybersecurity &nbsp;·&nbsp; Web Dev</span>
+    <span>Swastik &nbsp;·&nbsp; Suvajit &nbsp;·&nbsp; Dibyojoti &nbsp;·&nbsp; Aditya &nbsp;·&nbsp; Building Beyond Limits.</span>
+  </div>
+  <button class="alert-close" onclick="document.getElementById('alertBar').style.display='none'">&#x2715;</button>
+</div>
+
+<!-- NAV -->
+<nav id="mainNav">
+  <div class="nav-inner">
+    <!-- Logo -->
+    <a href="#home" class="nav-logo">
+      <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right:10px;">
+        <polygon points="14,2 26,8 26,20 14,26 2,20 2,8" stroke="#0066FF" stroke-width="1.5" fill="none"/>
+        <polygon points="14,6 22,10 22,18 14,22 6,18 6,10" fill="#0066FF" opacity="0.15"/>
+        <line x1="14" y1="2" x2="14" y2="26" stroke="#0066FF" stroke-width="1" opacity="0.4"/>
+        <line x1="2" y1="8" x2="26" y2="20" stroke="#0066FF" stroke-width="1" opacity="0.4"/>
+        <line x1="26" y1="8" x2="2" y2="20" stroke="#0066FF" stroke-width="1" opacity="0.4"/>
+      </svg>
+      VYRONIX<span class="logo-accent">LABS</span>
+    </a>
+
+    <!-- Center links -->
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#home" class="active">Home</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#team">Team</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#techstack">Tech</a></li>
+      <li><a href="#hackathon">Hackathon</a></li>
+      <li><a href="#partnership">Partners</a></li>
+      <li><a href="#join">Join Us</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+
+    <!-- Yellow CTA -->
+    <a href="#join" class="nav-cta">Join Our Team</a>
+
+    <!-- Hamburger -->
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-close" id="mobileClose">✕</button>
+  <a href="#home" onclick="closeMobileMenu()">Home</a>
+  <a href="#about" onclick="closeMobileMenu()">About</a>
+  <a href="#team" onclick="closeMobileMenu()">Team</a>
+  <a href="#services" onclick="closeMobileMenu()">Services</a>
+  <a href="#projects" onclick="closeMobileMenu()">Projects</a>
+  <a href="#techstack" onclick="closeMobileMenu()">Tech Stack</a>
+  <a href="#hackathon" onclick="closeMobileMenu()">Hackathon</a>
+  <a href="#partnership" onclick="closeMobileMenu()">Partnership</a>
+  <a href="#join" onclick="closeMobileMenu()">Join Us</a>
+  <a href="#contact" onclick="closeMobileMenu()">Contact</a>
+</div>
+
+<!-- HERO -->
+<section id="home">
+  <canvas id="particles-canvas"></canvas>
+  <!-- Background Video -->
+  <video id="heroBgVideo" autoplay muted loop playsinline>
+    <source src="hero-background.mp4" type="video/mp4">
+  </video>
+  <div class="hero-bg-gradient"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-spacer">
+    <div class="hero-content">
+    <p class="hero-label">// Transmission Initialized — System Active</p>
+    <h1 class="hero-title">VYRONIX<br><span class="accent">LABS</span></h1>
+    <p class="hero-sub">Building the Future with <strong>AI, Arduino</strong> & Innovation<br>
+    Transforming Ideas into Intelligent Real-World Solutions</p>
+    <div class="hero-btns">
+      <a href="#about" class="btn-primary">Explore Our Work</a>
+      <a href="#join" class="btn-outline">Join the Lab</a>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <span class="num" data-target="4">4</span>
+        <span class="label">Innovators</span>
+      </div>
+      <div class="hero-stat">
+        <span class="num" data-target="24">24</span>
+        <span class="label">Hackathon Hours</span>
+      </div>
+      <div class="hero-stat">
+        <span class="num" data-target="9">9+</span>
+        <span class="label">Tech Domains</span>
+      </div>
+      <div class="hero-stat">
+        <span class="num" data-target="1">∞</span>
+        <span class="label">Ideas Building</span>
+      </div>
+    </div>
+  </div>
+  </div>
+  <div class="hero-scroll">
+    <span>Descend</span>
+    <div class="scroll-line"></div>
+  </div>
+
+  <!-- RIBBON STRIP — anchored to hero bottom -->
+  <div class="ribbon">
+    <div class="ribbon-track">
+      <div class="ribbon-item">
+        <span class="ribbon-sep"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1L9.8 6H15L10.6 9.2L12.4 14.2L8 11L3.6 14.2L5.4 9.2L1 6H6.2L8 1Z" fill="#0066FF"/></svg></span>
+        <span class="ribbon-text">Vyronix Labs is Hiring</span>
+      </div>
+      <div class="ribbon-item">
+        <span class="ribbon-sep"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1L9.8 6H15L10.6 9.2L12.4 14.2L8 11L3.6 14.2L5.4 9.2L1 6H6.2L8 1Z" fill="#0066FF"/></svg></span>
+        <span class="ribbon-text">AI &amp; Hardware Innovation Lab</span>
+      </div>
+      <div class="ribbon-item">
+        <span class="ribbon-sep"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1L9.8 6H15L10.6 9.2L12.4 14.2L8 11L3.6 14.2L5.4 9.2L1 6H6.2L8 1Z" fill="#0066FF"/></svg></span>
+        <span class="ribbon-text">Catalyst 24hr Hackathon — AUK 2026</span>
+      </div>
+      <div class="ribbon-item">
+        <span class="ribbon-sep"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1L9.8 6H15L10.6 9.2L12.4 14.2L8 11L3.6 14.2L5.4 9.2L1 6H6.2L8 1Z" fill="#0066FF"/></svg></span>
+        <span class="ribbon-text">Web Services with VMC Tech India</span>
+      </div>
+      <div class="ribbon-item">
+        <span class="ribbon-sep"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1L9.8 6H15L10.6 9.2L12.4 14.2L8 11L3.6 14.2L5.4 9.2L1 6H6.2L8 1Z" fill="#0066FF"/></svg></span>
+        <span class="ribbon-text">Arduino &nbsp;·&nbsp; IoT &nbsp;·&nbsp; Embedded Systems</span>
+      </div>
+      <div class="ribbon-item">
+        <span class="ribbon-sep"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1L9.8 6H15L10.6 9.2L12.4 14.2L8 11L3.6 14.2L5.4 9.2L1 6H6.2L8 1Z" fill="#0066FF"/></svg></span>
+        <span class="ribbon-text">Powered by Intelligence. Driven by Passion.</span>
+      </div>
+      <!-- duplicate for seamless loop -->
+      <div class="ribbon-item">
+        <span class="ribbon-sep"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1L9.8 6H15L10.6 9.2L12.4 14.2L8 11L3.6 14.2L5.4 9.2L1 6H6.2L8 1Z" fill="#0066FF"/></svg></span>
+        <span class="ribbon-text">Vyronix Labs is Hiring</span>
+      </div>
+      <div class="ribbon-item">
+        <span class="ribbon-sep"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1L9.8 6H15L10.6 9.2L12.4 14.2L8 11L3.6 14.2L5.4 9.2L1 6H6.2L8 1Z" fill="#0066FF"/></svg></span>
+        <span class="ribbon-text">AI &amp; Hardware Innovation Lab</span>
+      </div>
+      <div class="ribbon-item">
+        <span class="ribbon-sep"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1L9.8 6H15L10.6 9.2L12.4 14.2L8 11L3.6 14.2L5.4 9.2L1 6H6.2L8 1Z" fill="#0066FF"/></svg></span>
+        <span class="ribbon-text">Catalyst 24hr Hackathon — AUK 2026</span>
+      </div>
+      <div class="ribbon-item">
+        <span class="ribbon-sep"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1L9.8 6H15L10.6 9.2L12.4 14.2L8 11L3.6 14.2L5.4 9.2L1 6H6.2L8 1Z" fill="#0066FF"/></svg></span>
+        <span class="ribbon-text">Web Services with VMC Tech India</span>
+      </div>
+      <div class="ribbon-item">
+        <span class="ribbon-sep"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1L9.8 6H15L10.6 9.2L12.4 14.2L8 11L3.6 14.2L5.4 9.2L1 6H6.2L8 1Z" fill="#0066FF"/></svg></span>
+        <span class="ribbon-text">Arduino &nbsp;·&nbsp; IoT &nbsp;·&nbsp; Embedded Systems</span>
+      </div>
+      <div class="ribbon-item">
+        <span class="ribbon-sep"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1L9.8 6H15L10.6 9.2L12.4 14.2L8 11L3.6 14.2L5.4 9.2L1 6H6.2L8 1Z" fill="#0066FF"/></svg></span>
+        <span class="ribbon-text">Powered by Intelligence. Driven by Passion.</span>
+      </div>
+    </div>
+  </div>
+</section>
+<section id="about">
+  <div class="reveal">
+    <p class="section-label">// About Vyronix Labs</p>
+    <h2 class="section-title">WHERE <span class="accent">IDEAS</span> BECOME<br><span class="accent-y">REALITY</span></h2>
+    <p class="section-desc">We are a team of passionate innovators driven by an unwavering belief that technology can transform the world — one intelligent system at a time.</p>
+  </div>
+
+  <div class="about-grid">
+    <div class="about-text reveal">
+      <p>Vyronix Labs was born from a shared passion for pushing boundaries. We are four enthusiastic tech innovators — <strong>Swastik, Suvajit, Dibyojoti, and Aditya</strong> — united by the vision of building futuristic, intelligent, and impactful solutions that bridge the gap between imagination and reality.</p>
+      <p>Our work spans across <strong>Artificial Intelligence</strong>, where we harness machine learning and intelligent algorithms to supercharge every project we build. We dive deep into <strong>Arduino-based systems</strong>, crafting hardware that thinks, reacts, and evolves. From smart home automation to IoT sensor networks, our embedded electronics projects have a real-world impact.</p>
+      <p>We believe in a holistic approach to innovation — combining <strong>cutting-edge web development</strong>, <strong>cybersecurity solutions</strong>, <strong>robotics concepts</strong>, and <strong>intelligent interfaces</strong> into cohesive, production-ready systems. Every line of code we write, every circuit we design, carries our mission forward: to innovate beyond limits.</p>
+
+      <div class="about-pillars">
+        <div class="pillar">
+          <span class="pillar-label">Mission</span>
+          <span class="pillar-text">Transform ideas into intelligent, real-world solutions using AI and modern technology.</span>
+        </div>
+        <div class="pillar">
+          <span class="pillar-label">Vision</span>
+          <span class="pillar-text">To become a leading innovation lab where technology meets creativity at every level.</span>
+        </div>
+        <div class="pillar">
+          <span class="pillar-label">Values</span>
+          <span class="pillar-text">Collaboration, curiosity, relentless improvement, and building with purpose.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="about-cards reveal">
+      <div class="about-card">
+        <span class="about-card-icon"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2a4 4 0 0 1 4 4v1h1a3 3 0 0 1 3 3v6a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3v-6a3 3 0 0 1 3-3h1V6a4 4 0 0 1 4-4z"/><circle cx="9" cy="13" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="13" r="1" fill="currentColor" stroke="none"/><path d="M9 17s1 1 3 1 3-1 3-1"/></svg></span>
+        <h3>Artificial Intelligence</h3>
+        <p>Integrating AI to make every system smarter, more adaptive, and more impactful.</p>
+      </div>
+      <div class="about-card">
+        <span class="about-card-icon"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="8" width="16" height="8" rx="1"/><path d="M8 8V6M12 8V6M16 8V6M8 16v2M12 16v2M16 16v2M2 11h2M20 11h2M2 13h2M20 13h2"/></svg></span>
+        <h3>Arduino & Hardware</h3>
+        <p>Building embedded systems and hardware projects that interact with the real world.</p>
+      </div>
+      <div class="about-card">
+        <span class="about-card-icon"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M6.3 6.3a8 8 0 0 0 0 11.4M17.7 6.3a8 8 0 0 1 0 11.4M3.5 3.5a13 13 0 0 0 0 17M20.5 3.5a13 13 0 0 1 0 17"/></svg></span>
+        <h3>IoT Systems</h3>
+        <p>Connecting devices and sensors into intelligent, networked ecosystems.</p>
+      </div>
+      <div class="about-card">
+        <span class="about-card-icon"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L4 6v6c0 5.5 3.6 10.7 8 12 4.4-1.3 8-6.5 8-12V6L12 2z"/><path d="M9 12l2 2 4-4"/></svg></span>
+        <h3>Cybersecurity</h3>
+        <p>Designing security-first architectures for smart and digital systems.</p>
+      </div>
+      <div class="about-card">
+        <span class="about-card-icon"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/><circle cx="12" cy="12" r="4"/></svg></span>
+        <h3>Smart Automation</h3>
+        <p>Creating automated workflows and intelligent control systems.</p>
+      </div>
+      <div class="about-card">
+        <span class="about-card-icon"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/><path d="M7 8l-3 4 3 4M17 8l3 4-3 4M14 7l-4 10"/></svg></span>
+        <h3>Web Development</h3>
+        <p>Crafting futuristic, responsive web experiences with modern frameworks.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section id="team">
+  <div class="reveal">
+    <p class="section-label">// The Innovators</p>
+    <h2 class="section-title">MEET THE <span class="accent">TEAM</span></h2>
+    <p class="section-desc">Four minds. One mission. Infinite possibilities. Meet the engineers behind Vyronix Labs.</p>
+  </div>
+
+  <div class="team-grid reveal">
+
+    <div class="team-card">
+      <div class="team-photo">
+        <img src="https://i.ibb.co/3m1M1p0j/Whats-App-Image-2026-05-24-at-10-46-09-PM.jpg" alt="Swastik" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block;">
+        <div class="team-photo-overlay">
+          <p class="team-photo-overlay-text">Passionate about machine learning &amp; intelligent system design. Drives the AI strategy across all Vyronix Lab projects.</p>
+        </div>
+      </div>
+      <div class="team-info">
+        <p class="team-dept">IT &amp; AI Head</p>
+        <h3 class="team-name">Swastik</h3>
+        <p class="team-role">AI &amp; Systems Lead</p>
+        <div class="team-tags">
+          <span class="tag">AI/ML</span>
+          <span class="tag">Python</span>
+          <span class="tag">Systems</span>
+        </div>
+        <a href="https://instagram.com/username" target="_blank" class="team-instagram"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>@username</a>
+      </div>
+    </div>
+
+    <div class="team-card">
+      <div class="team-photo">
+        <img src="https://i.ibb.co/VYkYg2YH/Whats-App-Image-2026-05-24-at-9-26-47-PM.jpg" alt="Suvajit" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block;">
+        <div class="team-photo-overlay">
+          <p class="team-photo-overlay-text">The hands-on hardware wizard. Brings circuits to life with Arduino, embedded electronics &amp; IoT integrations.</p>
+        </div>
+      </div>
+      <div class="team-info">
+        <p class="team-dept">Hardware &amp; IoT Head</p>
+        <h3 class="team-name">Suvajit</h3>
+        <p class="team-role">Hardware &amp; Arduino Lead</p>
+        <div class="team-tags">
+          <span class="tag">Arduino</span>
+          <span class="tag">IoT</span>
+          <span class="tag">Electronics</span>
+        </div>
+        <a href="https://instagram.com/username" target="_blank" class="team-instagram"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>@username</a>
+      </div>
+    </div>
+
+    <div class="team-card">
+      <div class="team-photo">
+        <img src="https://i.ibb.co/rR1r1Frk/Whats-App-Image-2026-05-24-at-10-43-21-PM.jpg" alt="Dibyojoti" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block;">
+        <div class="team-photo-overlay">
+          <p class="team-photo-overlay-text">Crafts futuristic digital experiences with elegant code. Leads front-end innovation &amp; intelligent UI/UX for Vyronix Labs.</p>
+        </div>
+      </div>
+      <div class="team-info">
+        <p class="team-dept">Web &amp; Design Head</p>
+        <h3 class="team-name">Dibyojoti</h3>
+        <p class="team-role">Web &amp; Interface Architect</p>
+        <div class="team-tags">
+          <span class="tag">Web Dev</span>
+          <span class="tag">UI/UX</span>
+          <span class="tag">JavaScript</span>
+        </div>
+        <a href="https://instagram.com/username" target="_blank" class="team-instagram"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>@username</a>
+      </div>
+    </div>
+
+    <div class="team-card">
+      <div class="team-photo">
+        <img src="https://i.ibb.co/RpDfrgym/Whats-App-Image-2026-05-24-at-11-47-26-PM.jpg" alt="Aditya" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block;">
+        <div class="team-photo-overlay">
+          <p class="team-photo-overlay-text">Focused on smart automation, cybersecurity &amp; building secure digital architectures for intelligent systems.</p>
+        </div>
+      </div>
+      <div class="team-info">
+        <p class="team-dept">Security &amp; Automation Head</p>
+        <h3 class="team-name">Aditya</h3>
+        <p class="team-role">Automation &amp; Security Lead</p>
+        <div class="team-tags">
+          <span class="tag">Automation</span>
+          <span class="tag">Security</span>
+          <span class="tag">Robotics</span>
+        </div>
+        <a href="https://instagram.com/username" target="_blank" class="team-instagram"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>@username</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="reveal">
+    <p class="section-label">// What We Build</p>
+    <h2 class="section-title">OUR <span class="accent">SERVICES</span></h2>
+    <p class="section-desc">From AI-powered applications to embedded hardware systems — we deliver intelligent solutions across the full technology spectrum.</p>
+  </div>
+
+  <div class="services-grid reveal">
+    <div class="service-card">
+      <span class="service-num">01</span>
+      <span class="service-icon"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44L2.5 8a2.5 2.5 0 0 1 2-2.9L9.5 2z"/><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44L21.5 8a2.5 2.5 0 0 0-2-2.9L14.5 2z"/></svg></span>
+      <h3 class="service-title">AI-Powered Applications</h3>
+      <p class="service-desc">Building intelligent applications powered by machine learning, computer vision, NLP, and adaptive AI systems that learn and evolve.</p>
+    </div>
+    <div class="service-card">
+      <span class="service-num">02</span>
+      <span class="service-icon"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span>
+      <h3 class="service-title">Web Development</h3>
+      <p class="service-desc">Modern, responsive, and futuristic web experiences built with cutting-edge technologies. From landing pages to complex web applications.</p>
+    </div>
+    <div class="service-card">
+      <span class="service-num">03</span>
+      <span class="service-icon"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M7 12h2M15 10v4M17 10v4M9 10v4"/><circle cx="5" cy="12" r="1" fill="currentColor" stroke="none"/></svg></span>
+      <h3 class="service-title">Arduino & IoT Projects</h3>
+      <p class="service-desc">Custom Arduino-based systems, IoT sensor networks, real-time data collection, and hardware-software integration solutions.</p>
+    </div>
+    <div class="service-card">
+      <span class="service-num">04</span>
+      <span class="service-icon"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 6h16M4 12h16M4 18h16M9 3v3M15 3v3M9 18v3M15 18v3"/></svg></span>
+      <h3 class="service-title">Hardware Integrations</h3>
+      <p class="service-desc">Seamlessly bridging the physical and digital worlds through embedded electronics, microcontrollers, and intelligent hardware integrations.</p>
+    </div>
+    <div class="service-card">
+      <span class="service-num">05</span>
+      <span class="service-icon"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 3h6v6H3zM15 3h6v6h-6zM3 15h6v6H3zM15 15h6v6h-6z"/><path d="M9 6h6M6 9v6M18 9v6M9 18h6"/></svg></span>
+      <h3 class="service-title">Smart Automation Systems</h3>
+      <p class="service-desc">Designing intelligent automation workflows — from smart home systems to industrial control panels — that save time and enhance efficiency.</p>
+    </div>
+    <div class="service-card">
+      <span class="service-num">06</span>
+      <span class="service-icon"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L4 6v6c0 5.5 3.6 10.7 8 12 4.4-1.3 8-6.5 8-12V6L12 2z"/><path d="M9 12l2 2 4-4"/></svg></span>
+      <h3 class="service-title">Security Solutions</h3>
+      <p class="service-desc">Cybersecurity-first architectures, secure system design, threat analysis, and building digital defenses for modern intelligent systems.</p>
+    </div>
+    <div class="service-card">
+      <span class="service-num">07</span>
+      <span class="service-icon"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M9 7h6M9 11h6M9 15h4"/><circle cx="16" cy="15" r="1" fill="currentColor" stroke="none"/></svg></span>
+      <h3 class="service-title">Embedded Electronics</h3>
+      <p class="service-desc">Designing and prototyping embedded systems with microcontrollers, sensors, actuators, and real-time operating constraints.</p>
+    </div>
+    <div class="service-card">
+      <span class="service-num">08</span>
+      <span class="service-icon"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/><path d="M6 8h4v4H6zM14 8h4v2h-4zM14 13h4"/></svg></span>
+      <h3 class="service-title">Intelligent Interfaces</h3>
+      <p class="service-desc">Crafting immersive, AI-enhanced user interfaces that adapt to context and deliver extraordinary digital experiences.</p>
+    </div>
+    <div class="service-card">
+      <span class="service-num">09</span>
+      <span class="service-icon"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6L12 2z"/></svg></span>
+      <h3 class="service-title">Futuristic Digital Experiences</h3>
+      <p class="service-desc">Pushing the boundaries of what's possible — interactive visualizations, AR/VR concepts, and next-generation digital products.</p>
+    </div>
+  </div>
+
+  <div class="collab-banner reveal">
+    <div class="collab-text">
+      <h3 style="display:flex;align-items:center;gap:10px;"><svg style="width:22px;height:22px;flex-shrink:0;color:var(--yellow)" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg> Web Services in Collaboration with VMC Tech India</h3>
+      <p>Vyronix Labs proudly provides professional web development services in partnership with <a href="https://vmctechindia.com" target="_blank" class="inline-link">VMC Tech India</a> — delivering enterprise-grade digital solutions to clients across India.</p>
+    </div>
+    <a href="https://vmctechindia.com" target="_blank" class="btn-primary">Visit VMC Tech India →</a>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="reveal">
+    <p class="section-label">// What We've Built</p>
+    <h2 class="section-title">PROJECT <span class="accent">SHOWCASE</span></h2>
+    <p class="section-desc">Real-world innovations built with passion, intelligence, and relentless curiosity.</p>
+  </div>
+
+  <div class="projects-grid reveal">
+    <div class="project-card">
+      <div class="project-thumb"><svg class="proj-svg" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="24" cy="20" r="8"/><path d="M14 38c0-5.5 4.5-10 10-10s10 4.5 10 10"/><circle cx="24" cy="20" r="3" fill="currentColor" opacity=".3" stroke="none"/><path d="M24 8V4M24 36v4M8 20H4M44 20h-4" opacity=".5"/></svg></div>
+      <div class="project-info">
+        <p class="project-cat">AI · Automation</p>
+        <h3 class="project-name">Autonomous AI Assistant</h3>
+        <p class="project-desc">A context-aware AI assistant with NLP capabilities, designed to automate tasks and provide intelligent responses in real time.</p>
+        <div class="project-techs">
+          <span class="project-tech">Python</span>
+          <span class="project-tech">AI/ML</span>
+          <span class="project-tech">NLP</span>
+        </div>
+      </div>
+    </div>
+    <div class="project-card">
+      <div class="project-thumb"><svg class="proj-svg" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 36V20l12-8 12 8v16"/><path d="M20 36v-8h8v8"/><path d="M8 36h32"/><path d="M24 4v8M16 8l4 6M32 8l-4 6"/></svg></div>
+      <div class="project-info">
+        <p class="project-cat">Arduino · IoT</p>
+        <h3 class="project-name">Smart Environment Monitor</h3>
+        <p class="project-desc">An Arduino-based IoT system that monitors temperature, humidity, air quality, and triggers automated responses based on sensor data.</p>
+        <div class="project-techs">
+          <span class="project-tech">Arduino</span>
+          <span class="project-tech">IoT</span>
+          <span class="project-tech">Sensors</span>
+        </div>
+      </div>
+    </div>
+    <div class="project-card">
+      <div class="project-thumb"><svg class="proj-svg" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="10" y="20" width="28" height="22" rx="2"/><path d="M16 20V14a8 8 0 0 1 16 0v6"/><circle cx="24" cy="32" r="3"/><path d="M24 35v4"/></svg></div>
+      <div class="project-info">
+        <p class="project-cat">Security · Web</p>
+        <h3 class="project-name">SecureAuth System</h3>
+        <p class="project-desc">A multi-factor authentication system with biometric integration, anomaly detection, and real-time threat monitoring.</p>
+        <div class="project-techs">
+          <span class="project-tech">JavaScript</span>
+          <span class="project-tech">Security</span>
+          <span class="project-tech">AI</span>
+        </div>
+      </div>
+    </div>
+    <div class="project-card">
+      <div class="project-thumb"><svg class="proj-svg" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 24l18-16 18 16"/><path d="M14 24v16h20V24"/><path d="M20 40V30h8v10"/><circle cx="38" cy="14" r="4"/><path d="M38 10V6M38 22v-4M30 14h-4M50 14h-4" opacity=".5"/></svg></div>
+      <div class="project-info">
+        <p class="project-cat">Automation · Hardware</p>
+        <h3 class="project-name">Smart Home Controller</h3>
+        <p class="project-desc">An integrated home automation system with voice control, mobile app interface, and AI-driven energy optimization.</p>
+        <div class="project-techs">
+          <span class="project-tech">Arduino</span>
+          <span class="project-tech">Python</span>
+          <span class="project-tech">IoT</span>
+        </div>
+      </div>
+    </div>
+    <div class="project-card">
+      <div class="project-thumb"><svg class="proj-svg" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="6" y="10" width="36" height="28" rx="2"/><path d="M6 18h36M14 14h4M22 14h4"/><path d="M16 28l6-6 4 4 6-8"/></svg></div>
+      <div class="project-info">
+        <p class="project-cat">Web Dev · AI</p>
+        <h3 class="project-name">AI-Powered Portfolio Engine</h3>
+        <p class="project-desc">A futuristic web platform with AI-driven content generation, dynamic animations, and intelligent user personalization.</p>
+        <div class="project-techs">
+          <span class="project-tech">HTML/CSS</span>
+          <span class="project-tech">JavaScript</span>
+          <span class="project-tech">AI API</span>
+        </div>
+      </div>
+    </div>
+    <div class="project-card">
+      <div class="project-thumb"><svg class="proj-svg" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="12" y="14" width="24" height="20" rx="3"/><circle cx="19" cy="24" r="2.5"/><circle cx="29" cy="24" r="2.5"/><path d="M19 30h10"/><path d="M24 14v-4M20 10h8"/><path d="M12 24H6M42 24h-6"/><path d="M16 34l-4 6M32 34l4 6"/></svg></div>
+      <div class="project-info">
+        <p class="project-cat">Robotics · Embedded</p>
+        <h3 class="project-name">Autonomous Navigation Bot</h3>
+        <p class="project-desc">A self-navigating robot with obstacle avoidance, real-time path planning, and sensor fusion using ultrasonic and IR sensors.</p>
+        <div class="project-techs">
+          <span class="project-tech">Arduino</span>
+          <span class="project-tech">C++</span>
+          <span class="project-tech">Robotics</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TECH STACK -->
+<section id="techstack">
+  <div class="reveal">
+    <p class="section-label">// Our Arsenal</p>
+    <h2 class="section-title">TECH <span class="accent-y">STACK</span></h2>
+    <p class="section-desc">The technologies and tools that power Vyronix Labs' innovations.</p>
+  </div>
+
+  <div class="tech-grid reveal">
+    <div class="tech-badge"><span class="tech-icon"><svg class="badge-svg" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="8" r="4"/><path d="M4 18c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg></span><span class="tech-name">Artificial Intelligence</span></div>
+    <div class="tech-badge"><span class="tech-icon"><svg class="badge-svg" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 2C7.2 2 6 3 6 5v2h4v1H5C3 8 2 9.2 2 11c0 2 1 3.2 3 3.5L6 15h2v-2h4v2h2l1-1.5c2-.3 3-1.5 3-3.5 0-1.8-1-3-3-3H9V6h2V4L10 2z"/></svg></span><span class="tech-name">Python</span></div>
+    <div class="tech-badge"><span class="tech-icon"><svg class="badge-svg" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="6" width="16" height="8" rx="1.5"/><path d="M6 10h2M14 9v2"/><circle cx="4" cy="10" r=".8" fill="currentColor" stroke="none"/></svg></span><span class="tech-name">Arduino / C++</span></div>
+    <div class="tech-badge"><span class="tech-icon"><svg class="badge-svg" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 3l1.5 13.5L10 18l4.5-1.5L16 3H4z"/><path d="M7 7h6l-.5 5L10 13l-2.5-.8L7 10h2l.2 1.2L10 11.5l.8-.3.2-1.2H7"/></svg></span><span class="tech-name">HTML & CSS</span></div>
+    <div class="tech-badge"><span class="tech-icon"><svg class="badge-svg" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="16" height="16" rx="1.5"/><path d="M11 8v5a2 2 0 0 1-4 0M14 8v3.5a1.5 1.5 0 0 0 3 0V10"/></svg></span><span class="tech-name">JavaScript</span></div>
+    <div class="tech-badge"><span class="tech-icon"><svg class="badge-svg" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="10" r="2.5"/><path d="M5.5 5.5a6.5 6.5 0 0 0 0 9M14.5 5.5a6.5 6.5 0 0 1 0 9"/></svg></span><span class="tech-name">IoT Systems</span></div>
+    <div class="tech-badge"><span class="tech-icon"><svg class="badge-svg" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="4" width="12" height="12" rx="1"/><rect x="7" y="7" width="6" height="6"/><path d="M10 2v2M10 16v2M2 10h2M16 10h2"/></svg></span><span class="tech-name">Embedded Systems</span></div>
+    <div class="tech-badge"><span class="tech-icon"><svg class="badge-svg" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 2v4M10 14v4M3.5 3.5l3 3M13.5 13.5l3 3M2 10h4M14 10h4M3.5 16.5l3-3M13.5 6.5l3-3"/><circle cx="10" cy="10" r="2.5"/></svg></span><span class="tech-name">Sensor Networks</span></div>
+    <div class="tech-badge"><span class="tech-icon"><svg class="badge-svg" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 2L3 5.5v4.5c0 4 2.8 7.8 7 9 4.2-1.2 7-5 7-9V5.5L10 2z"/><path d="M7.5 10l2 2 3-3"/></svg></span><span class="tech-name">Cybersecurity</span></div>
+    <div class="tech-badge"><span class="tech-icon"><svg class="badge-svg" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="7" width="10" height="9" rx="2"/><circle cx="8" cy="12" r="1.2" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.2" fill="currentColor" stroke="none"/><path d="M10 7V5M8 5h4"/><path d="M5 11H3M17 11h-2"/></svg></span><span class="tech-name">Robotics</span></div>
+    <div class="tech-badge"><span class="tech-icon"><svg class="badge-svg" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10a8 8 0 0 1 14-5.3"/><path d="M22 10a8 8 0 0 1-14 5.3" transform="translate(-2,0)"/><path d="M14 3l2 2-2 2M6 17l-2-2 2-2" transform="scale(.9) translate(1,1)"/></svg></span><span class="tech-name">Automation Tools</span></div>
+    <div class="tech-badge"><span class="tech-icon"><svg class="badge-svg" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="6" width="14" height="9" rx="1"/><path d="M7 6V4M13 6V4M7 15v1M13 15v1M1 9h2M17 9h2"/></svg></span><span class="tech-name">Hardware Electronics</span></div>
+  </div>
+</section>
+
+<!-- HACKATHON -->
+<section id="hackathon">
+  <div class="reveal">
+    <p class="section-label">// Battle Tested</p>
+    <h2 class="section-title">HACKATHON <span class="accent">JOURNEY</span></h2>
+    <p class="section-desc">Where pressure becomes the catalyst for our greatest innovations.</p>
+  </div>
+
+  <div class="hack-layout reveal">
+    <div class="hack-stats">
+      <div class="hack-stat">
+        <span class="hack-stat-num">24</span>
+        <span class="hack-stat-label">Hours of Chaos</span>
+      </div>
+      <div class="hack-stat">
+        <span class="hack-stat-num">4</span>
+        <span class="hack-stat-label">Innovators</span>
+      </div>
+      <div class="hack-stat">
+        <span class="hack-stat-num">1</span>
+        <span class="hack-stat-label">Vision Realized</span>
+      </div>
+      <div class="hack-stat">
+        <span class="hack-stat-num">∞</span>
+        <span class="hack-stat-label">Ideas Generated</span>
+      </div>
+    </div>
+
+    <div class="hack-info">
+      <h3>Catalyst Hackathon @ AUK 2026</h3>
+      <p>Vyronix Labs made its mark in the competitive arena at the <strong>24-hour Hackathon organized by Catalyst</strong> at <strong>Amity University Kolkata (AUK)</strong>. This was our first major collaborative challenge as a team, and it defined who we are as innovators.</p>
+      <p>Under relentless time pressure, we conceived, designed, and built a working intelligent system that showcased our combined expertise in AI, hardware integration, and software development. The experience forged us into a stronger, more cohesive team.</p>
+
+      <div class="hack-timeline">
+        <div class="timeline-item">
+          <h4>Hour 00 — Brief Received</h4>
+          <p>Team assembled. Problem statement analyzed. Architecture designed in minutes.</p>
+        </div>
+        <div class="timeline-item">
+          <h4>Hour 08 — Core System Built</h4>
+          <p>Primary functionality working. AI integration complete. Hardware loop running.</p>
+        </div>
+        <div class="timeline-item">
+          <h4>Hour 20 — Full Integration</h4>
+          <p>All modules connected. UI polished. Testing and optimization underway.</p>
+        </div>
+        <div class="timeline-item">
+          <h4>Hour 24 — Project Delivered</h4>
+          <p>Live demonstration completed. Innovation presented to judges and peers.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PARTNERSHIP -->
+<section id="partnership">
+  <div class="reveal">
+    <p class="section-label">// Collaborations</p>
+    <h2 class="section-title">OUR <span class="accent">PARTNERSHIPS</span></h2>
+    <p class="section-desc">Building bridges between innovation and industry through strategic collaborations.</p>
+  </div>
+
+  <div class="partner-cards reveal">
+    <div class="partner-card">
+      <div class="partner-icon-wrap"><svg class="partner-svg" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="8" width="24" height="18" rx="2"/><path d="M4 13h24"/><path d="M10 17h5M10 21h8"/><circle cx="24" cy="19" r="3"/></svg></div>
+      <div class="partner-content">
+        <h3>VMC Tech India</h3>
+        <p>Vyronix Labs proudly collaborates with VMC Tech India to deliver professional web development and digital solutions to clients across India. This partnership extends our reach and capabilities into the enterprise technology space.</p>
+        <a href="https://vmctechindia.com" target="_blank">Visit VMC Tech India →</a>
+      </div>
+    </div>
+    <div class="partner-card">
+      <div class="partner-icon-wrap"><svg class="partner-svg" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 4l14 10v14H2V14L16 4z"/><path d="M11 28V20h10v8"/><path d="M16 4v6"/><circle cx="16" cy="13" r="2.5"/></svg></div>
+      <div class="partner-content">
+        <h3>Catalyst @ Amity University Kolkata</h3>
+        <p>Our participation in the Catalyst Hackathon at AUK represents our connection with the broader innovation and academic community. We actively engage with institutions fostering next-generation technology talent.</p>
+        <a href="#hackathon">Learn About Our Journey →</a>
+      </div>
+    </div>
+    <div class="partner-card">
+      <div class="partner-icon-wrap"><svg class="partner-svg" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="12" r="4"/><circle cx="22" cy="12" r="4"/><path d="M4 26c0-3.3 2.7-6 6-6h12c3.3 0 6 2.7 6 6"/><path d="M16 8v16"/></svg></div>
+      <div class="partner-content">
+        <h3>Open for Collaboration</h3>
+        <p>Vyronix Labs is actively seeking partnerships with startups, enterprises, academic institutions, and fellow innovators. If you have a bold vision that requires intelligent technology solutions, let's build it together.</p>
+        <a href="#contact">Get in Touch →</a>
+      </div>
+    </div>
+    <div class="partner-card">
+      <div class="partner-icon-wrap"><svg class="partner-svg" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="16" cy="16" r="12"/><path d="M4 16h24M16 4a18 18 0 0 1 4 12 18 18 0 0 1-4 12 18 18 0 0 1-4-12 18 18 0 0 1 4-12z"/></svg></div>
+      <div class="partner-content">
+        <h3>Innovation Ecosystem</h3>
+        <p>We believe in the power of the innovation ecosystem. Vyronix Labs is actively building relationships with tech communities, open-source projects, and fellow builders across India and beyond.</p>
+        <a href="#join">Join Our Network →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- JOIN -->
+<section id="join">
+  <div class="reveal">
+    <p class="section-label">// Grow With Us</p>
+    <h2 class="section-title">JOIN <span class="accent">OUR TEAM</span></h2>
+    <p class="section-desc">Are you a passionate innovator who wants to build the future? We're looking for driven minds to join the Vyronix Labs family.</p>
+  </div>
+
+  <div class="join-layout reveal">
+    <div class="join-info">
+      <h3>Why Vyronix Labs?</h3>
+      <p>We're not just a team — we're a movement. At Vyronix Labs, you'll work on real projects that push the boundaries of what's possible with AI, hardware, and modern technology.</p>
+      <p>Whether you're a student with a spark of curiosity or a seasoned builder with a portfolio, we value passion, creativity, and the hunger to learn above all else.</p>
+
+      <div class="join-perks">
+        <div class="perk">Work on real-world AI and hardware projects</div>
+        <div class="perk">Collaborate with talented, driven innovators</div>
+        <div class="perk">Participate in hackathons and tech events</div>
+        <div class="perk">Build a portfolio that stands out</div>
+        <div class="perk">Learn cutting-edge technologies hands-on</div>
+        <div class="perk">Be part of a growing innovation community</div>
+      </div>
+    </div>
+
+    <div class="form-card">
+      <form id="joinForm" action="https://formspree.io/f/YOUR_JOIN_FORM_ID" method="POST">
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" name="full_name" placeholder="Your full name" required>
+        </div>
+        <div class="form-group">
+          <label>Class / College Year</label>
+          <input type="text" name="year" placeholder="e.g. Class 12 / 2nd Year B.Tech" required>
+        </div>
+        <div class="form-group">
+          <label>School / College Name</label>
+          <input type="text" name="institution" placeholder="Your institution name" required>
+        </div>
+        <div class="form-group">
+          <label>Previous Hackathons Participated</label>
+          <textarea name="hackathons" placeholder="Describe any hackathons you've participated in. Add GitHub repo links if available (e.g. github.com/yourusername/project)"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Technologies Used in Projects</label>
+          <textarea name="technologies" placeholder="e.g. Python, Arduino, Machine Learning, JavaScript, IoT, React, etc."></textarea>
+        </div>
+        <button type="submit" class="btn-submit">Submit Application →</button>
+      </form>
+      <div class="success-msg" id="joinSuccess">
+        <h3 style="display:flex;align-items:center;gap:10px;"><svg class="success-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg> Application Received!</h3>
+        <p>Our team will contact you ASAP after reviewing your submission. Stay ready — exciting things are coming your way at Vyronix Labs.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="reveal">
+    <p class="section-label">// Get In Touch</p>
+    <h2 class="section-title">CONTACT <span class="accent">US</span></h2>
+    <p class="section-desc">Have an idea? A project? A question? We're here and we're listening.</p>
+  </div>
+
+  <div class="contact-layout reveal">
+    <div class="contact-info">
+      <h3>Let's Build Something Together</h3>
+      <p>Whether you're looking to collaborate on a project, partner with Vyronix Labs, or just want to talk tech — reach out. We respond to every message with the urgency it deserves.</p>
+      <div class="contact-items">
+        <div class="contact-item">
+          <div class="contact-item-icon"><svg class="contact-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2C8.7 2 6 4.7 6 8c0 5 6 14 6 14s6-9 6-14c0-3.3-2.7-6-6-6z"/><circle cx="12" cy="8" r="2.5"/></svg></div>
+          <div>
+            <span class="contact-item-label">Location</span>
+            <span class="contact-item-value">Kolkata, West Bengal, India</span>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-item-icon"><svg class="contact-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L3 7v10l9 5 9-5V7L12 2z"/><path d="M12 22V12M3 7l9 5 9-5"/></svg></div>
+          <div>
+            <span class="contact-item-label">Institution</span>
+            <span class="contact-item-value">Amity University Kolkata</span>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-item-icon"><svg class="contact-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 8h2a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-2v4l-4-4H9a2 2 0 0 1-2-2v-6a2 2 0 0 1 2-2h8z"/><path d="M15 2H7a2 2 0 0 0-2 2v6l2-1"/></svg></div>
+          <div>
+            <span class="contact-item-label">Partnership</span>
+            <span class="contact-item-value">VMC Tech India</span>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-item-icon"><svg class="contact-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
+          <div>
+            <span class="contact-item-label">Status</span>
+            <span class="contact-item-value">Open to collaborations & projects</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-card">
+      <form id="contactForm" action="https://formspree.io/f/YOUR_CONTACT_FORM_ID" method="POST">
+        <div class="form-group">
+          <label>Your Name</label>
+          <input type="text" name="name" placeholder="Full name" required>
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" name="email" placeholder="your@email.com" required>
+        </div>
+        <div class="form-group">
+          <label>Subject</label>
+          <input type="text" name="subject" placeholder="What's this about?" required>
+        </div>
+        <div class="form-group">
+          <label>Message</label>
+          <textarea name="message" placeholder="Tell us about your project, idea, or collaboration proposal..." style="min-height:140px;" required></textarea>
+        </div>
+        <button type="submit" class="btn-submit">Send Message →</button>
+      </form>
+      <div class="success-msg" id="contactSuccess">
+        <h3 style="display:flex;align-items:center;gap:10px;"><svg class="success-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg> Message Sent!</h3>
+        <p>Thanks for reaching out to Vyronix Labs. Our team will contact you ASAP after reviewing your submission.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="logo">VYRONIX<span>.</span>LABS</div>
+      <p>A team of four passionate innovators — Swastik, Suvajit, Dibyojoti, and Aditya — building intelligent, futuristic solutions with AI, Arduino, and modern technology.</p>
+      <div style="display:flex;gap:12px;">
+        <a href="#" style="color:var(--dim);font-family:var(--font-mono);font-size:11px;letter-spacing:0.1em;text-decoration:none;border-bottom:1px solid rgba(173,181,189,0.3);padding-bottom:2px;">GitHub</a>
+        <a href="#" style="color:var(--dim);font-family:var(--font-mono);font-size:11px;letter-spacing:0.1em;text-decoration:none;border-bottom:1px solid rgba(173,181,189,0.3);padding-bottom:2px;">Instagram</a>
+        <a href="#" style="color:var(--dim);font-family:var(--font-mono);font-size:11px;letter-spacing:0.1em;text-decoration:none;border-bottom:1px solid rgba(173,181,189,0.3);padding-bottom:2px;">LinkedIn</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Navigate</h4>
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About Us</a></li>
+        <li><a href="#team">Team</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#projects">Projects</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Explore</h4>
+      <ul>
+        <li><a href="#techstack">Tech Stack</a></li>
+        <li><a href="#hackathon">Hackathon</a></li>
+        <li><a href="#partnership">Partnership</a></li>
+        <li><a href="#join">Join Our Team</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Signal</h4>
+      <ul>
+        <li><a href="https://vmctechindia.com" target="_blank">VMC Tech India</a></li>
+        <li><a href="#join">Apply to Join</a></li>
+        <li><a href="#contact">Collaborate</a></li>
+        <li><a href="#hackathon">Hackathon Journey</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 Vyronix Labs — Innovating Beyond Limits</p>
+    <p class="tagline">STAY WEIRD. BUILD BOLD. INNOVATE ALWAYS.</p>
+  </div>
+</footer>
+
+<script>
+// ── SEAMLESS VIDEO LOOP ──────────────────────────────────────────
+const heroBgVideo = document.getElementById('heroBgVideo');
+if (heroBgVideo) {
+  heroBgVideo.addEventListener('timeupdate', () => {
+    const remaining = heroBgVideo.duration - heroBgVideo.currentTime;
+    if (remaining <= 1.4 && !heroBgVideo.classList.contains('fading')) {
+      heroBgVideo.classList.add('fading');
+      setTimeout(() => {
+        heroBgVideo.currentTime = 0;
+        heroBgVideo.play();
+        heroBgVideo.classList.remove('fading');
+      }, 1200);
+    }
+  });
+  // remove the default loop so we control it
+  heroBgVideo.removeAttribute('loop');
+}
+
+// AUKTAVE-style yellow arrow cursor
+const cursor = document.getElementById('cursor');
+document.addEventListener('mousemove', e => {
+  cursor.style.left = e.clientX + 'px';
+  cursor.style.top = e.clientY + 'px';
+});
+
+// ── Fixed header stack: measure alert bar and push nav + hero down ──
+function syncHeaderOffsets() {
+  const alertBar = document.getElementById('alertBar');
+  const alertH = (alertBar && alertBar.style.display !== 'none') ? alertBar.offsetHeight : 0;
+  document.documentElement.style.setProperty('--alert-bar-h', alertH + 'px');
+  // Keep hero section padding correct so content isn't hidden behind the fixed bars
+  const hero = document.getElementById('home');
+  if (hero) {
+    hero.style.paddingTop = (alertH + 64 + 24) + 'px'; // alert + nav + breathing room
+  }
+}
+syncHeaderOffsets();
+
+// Patch alert-close button to also re-sync offsets
+const alertCloseBtn = document.querySelector('.alert-close');
+if (alertCloseBtn) {
+  alertCloseBtn.addEventListener('click', () => {
+    document.getElementById('alertBar').style.display = 'none';
+    syncHeaderOffsets();
+  }, { once: false });
+  // Override the inline onclick so it doesn't fight
+  alertCloseBtn.removeAttribute('onclick');
+}
+window.addEventListener('resize', syncHeaderOffsets, { passive: true });
+// Scale up on interactive elements
+document.querySelectorAll('a, button, .team-card, .service-card, .project-card, .tech-badge').forEach(el => {
+  el.addEventListener('mouseenter', () => { cursor.style.transform = 'scale(1.4)'; });
+  el.addEventListener('mouseleave', () => { cursor.style.transform = 'scale(1)'; });
+});
+
+// Particles
+const canvas = document.getElementById('particles-canvas');
+const ctx = canvas.getContext('2d');
+let particles = [];
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+class Particle {
+  constructor() { this.reset(); }
+  reset() {
+    this.x = Math.random() * canvas.width;
+    this.y = Math.random() * canvas.height;
+    this.size = Math.random() * 1.5 + 0.3;
+    this.speedX = (Math.random() - 0.5) * 0.4;
+    this.speedY = (Math.random() - 0.5) * 0.4;
+    this.opacity = Math.random() * 0.5 + 0.1;
+    this.color = Math.random() > 0.7 ? '#0066FF' : Math.random() > 0.5 ? '#00F5FF' : '#ffffff';
+  }
+  update() {
+    this.x += this.speedX;
+    this.y += this.speedY;
+    if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) this.reset();
+  }
+  draw() {
+    ctx.globalAlpha = this.opacity;
+    ctx.fillStyle = this.color;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.fill();
+  }
+}
+
+for (let i = 0; i < 120; i++) particles.push(new Particle());
+
+function animParticles() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  particles.forEach(p => { p.update(); p.draw(); });
+  // Connect nearby particles
+  particles.forEach((a, i) => {
+    particles.slice(i + 1).forEach(b => {
+      const dist = Math.hypot(a.x - b.x, a.y - b.y);
+      if (dist < 80) {
+        ctx.globalAlpha = (1 - dist / 80) * 0.08;
+        ctx.strokeStyle = '#0066FF';
+        ctx.lineWidth = 0.5;
+        ctx.beginPath();
+        ctx.moveTo(a.x, a.y);
+        ctx.lineTo(b.x, b.y);
+        ctx.stroke();
+      }
+    });
+  });
+  ctx.globalAlpha = 1;
+  requestAnimationFrame(animParticles);
+}
+animParticles();
+
+// Reveal on scroll
+const revealEls = document.querySelectorAll('.reveal');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), 80);
+      obs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+revealEls.forEach(el => obs.observe(el));
+
+// Active nav
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 100) current = s.id;
+  });
+  navLinks.forEach(a => {
+    a.classList.remove('active');
+    if (a.getAttribute('href') === '#' + current) a.classList.add('active');
+  });
+}, { passive: true });
+
+// Mobile menu
+document.getElementById('hamburger').addEventListener('click', () => {
+  document.getElementById('mobileMenu').classList.add('open');
+});
+document.getElementById('mobileClose').addEventListener('click', closeMobileMenu);
+function closeMobileMenu() {
+  document.getElementById('mobileMenu').classList.remove('open');
+}
+
+// Forms — Formspree
+async function submitForm(formId, successId) {
+  const form = document.getElementById(formId);
+  const btn  = form.querySelector('button[type="submit"]');
+  const originalText = btn.textContent;
+
+  form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    btn.textContent = 'Sending...';
+    btn.disabled = true;
+
+    try {
+      const res = await fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { 'Accept': 'application/json' }
+      });
+
+      if (res.ok) {
+        form.style.display = 'none';
+        document.getElementById(successId).style.display = 'block';
+      } else {
+        const data = await res.json();
+        const msg = data.errors ? data.errors.map(e => e.message).join(', ') : 'Something went wrong. Please try again.';
+        alert(msg);
+        btn.textContent = originalText;
+        btn.disabled = false;
+      }
+    } catch (err) {
+      alert('Network error — please check your connection and try again.');
+      btn.textContent = originalText;
+      btn.disabled = false;
+    }
+  });
+}
+
+submitForm('joinForm',    'joinSuccess');
+submitForm('contactForm', 'contactSuccess');
+
+// ── AUDIO GATE ──────────────────────────────────────────────────
+function enterSite(withAudio) {
+  const gate   = document.getElementById('audioGate');
+  const loader = document.getElementById('siteLoader');
+  const player = document.getElementById('audioPlayer');
+  const audio  = document.getElementById('bgAudio');
+
+  // Hide gate, show loader
+  gate.classList.add('hidden');
+  setTimeout(() => { gate.style.display = 'none'; }, 700);
+  loader.style.display = 'flex';
+
+  // Animate progress bar 0 → 100% over ~2.4s
+  let pct = 0;
+  const fill = document.getElementById('loaderFill');
+  const pctLabel = document.getElementById('loaderPct');
+  const interval = setInterval(() => {
+    pct += Math.random() * 2 + 1.5;
+    if (pct >= 100) {
+      pct = 100;
+      clearInterval(interval);
+      fill.style.width = '100%';
+      pctLabel.textContent = 'SYNC 100%';
+      // Fade out loader, reveal site
+      setTimeout(() => {
+        loader.classList.add('fade-out');
+        player.classList.add('visible');
+        setTimeout(() => { loader.style.display = 'none'; }, 850);
+      }, 400);
+    }
+    fill.style.width = pct + '%';
+    pctLabel.textContent = 'SYNC ' + Math.floor(pct) + '%';
+  }, 150);
+
+  if (withAudio) {
+    audio.volume = 0.45;
+    audio.play().then(() => {
+      player.classList.add('playing');
+      updatePPIcon(true);
+    }).catch(() => {});
+  } else {
+    updatePPIcon(false);
+  }
+}
+
+// ── FLOATING PLAYER ─────────────────────────────────────────────
+function togglePlay() {
+  const audio  = document.getElementById('bgAudio');
+  const player = document.getElementById('audioPlayer');
+  if (audio.paused) {
+    audio.play().then(() => {
+      player.classList.add('playing');
+      updatePPIcon(true);
+    }).catch(() => {});
+  } else {
+    audio.pause();
+    player.classList.remove('playing');
+    updatePPIcon(false);
+  }
+}
+
+function updatePPIcon(playing) {
+  document.getElementById('ppIcon').innerHTML = playing
+    ? '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>'
+    : '<path d="M8 5v14l11-7z"/>';
+}
+
+function stopAudio() {
+  const audio  = document.getElementById('bgAudio');
+  const player = document.getElementById('audioPlayer');
+  audio.pause();
+  audio.currentTime = 0;
+  player.classList.remove('playing');
+  updatePPIcon(false);
+}
+
+</script>
+</body>
+</html>
