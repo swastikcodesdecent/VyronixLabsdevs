@@ -483,7 +483,11 @@
     font-size: 15px;
     line-height: 1.6;
     overflow-x: hidden;
-    cursor: none;
+  }
+
+  /* Custom cursor only on real pointer devices (not touch/mobile) */
+  @media (pointer: fine) {
+    body { cursor: none; }
   }
 
   /* AUKTAVE-style yellow arrow cursor */
@@ -496,6 +500,10 @@
     transform-origin: 4px 4px;
     transition: transform 0.08s ease;
     will-change: transform, left, top;
+    display: none; /* hidden by default, shown only on pointer:fine */
+  }
+  @media (pointer: fine) {
+    #cursor { display: block; }
   }
   #cursor svg {
     width: 100%;
@@ -646,6 +654,13 @@
     cursor: pointer;
     background: none;
     border: none;
+    padding: 10px;
+    margin: -10px;
+    min-width: 44px;
+    min-height: 44px;
+    align-items: center;
+    justify-content: center;
+    -webkit-tap-highlight-color: transparent;
   }
   .hamburger span {
     display: block;
@@ -1729,8 +1744,12 @@
     align-items: center;
     justify-content: center;
     gap: 32px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
   .mobile-menu.open { display: flex; }
+  /* Prevent body scroll when menu is open */
+  body.menu-open { overflow: hidden; }
   .mobile-menu a {
     font-family: var(--font-head);
     font-size: 24px;
@@ -1739,16 +1758,28 @@
     letter-spacing: 0.1em;
     text-transform: uppercase;
     transition: color 0.2s;
+    /* Bigger touch target */
+    padding: 8px 20px;
+    min-height: 48px;
+    display: flex;
+    align-items: center;
   }
-  .mobile-menu a:hover { color: var(--red); }
+  .mobile-menu a:hover,
+  .mobile-menu a:active { color: var(--red); }
   .mobile-close {
     position: absolute;
-    top: 24px; right: 24px;
+    top: 20px; right: 20px;
     background: none;
     border: none;
     color: var(--white);
     font-size: 28px;
     cursor: pointer;
+    padding: 8px;
+    min-width: 48px;
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   /* ── RESPONSIVE ── */
@@ -2833,12 +2864,14 @@ if (heroBgVideo) {
   heroBgVideo.removeAttribute('loop');
 }
 
-// AUKTAVE-style yellow arrow cursor
+// AUKTAVE-style yellow arrow cursor — only on non-touch devices
 const cursor = document.getElementById('cursor');
-document.addEventListener('mousemove', e => {
-  cursor.style.left = e.clientX + 'px';
-  cursor.style.top = e.clientY + 'px';
-});
+if (window.matchMedia('(pointer: fine)').matches) {
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+  });
+}
 
 // ── Fixed header stack: measure alert bar and push nav + hero down ──
 function syncHeaderOffsets() {
@@ -2864,11 +2897,13 @@ if (alertCloseBtn) {
   alertCloseBtn.removeAttribute('onclick');
 }
 window.addEventListener('resize', syncHeaderOffsets, { passive: true });
-// Scale up on interactive elements
-document.querySelectorAll('a, button, .team-card, .service-card, .project-card, .tech-badge').forEach(el => {
-  el.addEventListener('mouseenter', () => { cursor.style.transform = 'scale(1.4)'; });
-  el.addEventListener('mouseleave', () => { cursor.style.transform = 'scale(1)'; });
-});
+// Scale up on interactive elements (cursor effect — pointer devices only)
+if (window.matchMedia('(pointer: fine)').matches) {
+  document.querySelectorAll('a, button, .team-card, .service-card, .project-card, .tech-badge').forEach(el => {
+    el.addEventListener('mouseenter', () => { cursor.style.transform = 'scale(1.4)'; });
+    el.addEventListener('mouseleave', () => { cursor.style.transform = 'scale(1)'; });
+  });
+}
 
 // Particles
 const canvas = document.getElementById('particles-canvas');
@@ -2958,13 +2993,26 @@ window.addEventListener('scroll', () => {
 }, { passive: true });
 
 // Mobile menu
-document.getElementById('hamburger').addEventListener('click', () => {
-  document.getElementById('mobileMenu').classList.add('open');
+const hamburgerBtn = document.getElementById('hamburger');
+const mobileMenuEl = document.getElementById('mobileMenu');
+
+hamburgerBtn.addEventListener('click', () => {
+  if (mobileMenuEl.classList.contains('open')) {
+    closeMobileMenu();
+  } else {
+    mobileMenuEl.classList.add('open');
+    document.body.classList.add('menu-open');
+  }
 });
 document.getElementById('mobileClose').addEventListener('click', closeMobileMenu);
 function closeMobileMenu() {
-  document.getElementById('mobileMenu').classList.remove('open');
+  mobileMenuEl.classList.remove('open');
+  document.body.classList.remove('menu-open');
 }
+// Close on backdrop tap (tapping outside the menu content area)
+mobileMenuEl.addEventListener('click', (e) => {
+  if (e.target === mobileMenuEl) closeMobileMenu();
+});
 
 // Forms — Formspree
 async function submitForm(formId, successId) {
